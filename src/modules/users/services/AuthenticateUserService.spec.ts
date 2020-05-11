@@ -5,13 +5,22 @@ import AuthenticateUserService from './AuthenticateUserService';
 
 import AppError from '@shared/errors/AppError';
 
-describe('AuthenticateUser', () => {
-  it('Should be able to authenticate a user', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashRepository = new FakeHashRepository();
+let fakeUserRepository: FakeUserRepository;
+let fakeHashRepository: FakeHashRepository;
+let createUserService: CreateUserService;
+let authUserService: AuthenticateUserService;
 
-    const createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
-    const authUserService = new AuthenticateUserService(fakeUserRepository, fakeHashRepository);
+describe('AuthenticateUser', () => {
+
+  beforeEach(() => {
+    fakeUserRepository = new FakeUserRepository();
+    fakeHashRepository = new FakeHashRepository();
+
+    createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
+    authUserService = new AuthenticateUserService(fakeUserRepository, fakeHashRepository);
+  });
+
+  it('Should be able to authenticate a user', async () => {
 
     const user = await createUserService.execute({
       name: 'Teste 001',
@@ -28,11 +37,6 @@ describe('AuthenticateUser', () => {
   });
 
   it('Should be able a Throw Error when doesnt find a valid email ', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashRepository = new FakeHashRepository();
-
-    const createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
-    const authUserService = new AuthenticateUserService(fakeUserRepository, fakeHashRepository);
 
     const user = await createUserService.execute({
       name: 'Teste 001',
@@ -47,11 +51,6 @@ describe('AuthenticateUser', () => {
   });
 
   it('Should not be able to authenticate with wrong password', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashRepository = new FakeHashRepository();
-
-    const createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
-    const authUserService = new AuthenticateUserService(fakeUserRepository, fakeHashRepository);
 
     await createUserService.execute({
       name: 'Teste 001',

@@ -4,11 +4,20 @@ import CreateUserService from './CreateUserService';
 
 import AppError from '@shared/errors/AppError';
 
+  let fakeUserRepository: FakeUserRepository;
+  let fakeHashRepository: FakeHashRepository;
+  let createUserService: CreateUserService;
+
 describe('CreateUser', () => {
+
+  beforeEach(() => {
+    fakeUserRepository = new FakeUserRepository();
+    fakeHashRepository = new FakeHashRepository();
+    createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
+  });
+
+
   it('Should be able to create a new user', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashRepository = new FakeHashRepository();
-    const createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
 
     const user = await createUserService.execute({
       name: 'Teste 001',
@@ -20,10 +29,6 @@ describe('CreateUser', () => {
   });
 
   it('Should be have a mistake with the same email', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashRepository = new FakeHashRepository();
-    const createUserService = new CreateUserService(fakeUserRepository, fakeHashRepository);
-
     const user = await createUserService.execute({
       name: 'Teste 001',
       email: 'teste@test.com.br',
@@ -35,7 +40,6 @@ describe('CreateUser', () => {
       email: 'teste@test.com.br',
       password: '123456'
     })).rejects.toBeInstanceOf(AppError);
-
   });
 
 });

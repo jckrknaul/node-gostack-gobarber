@@ -14,4 +14,4 @@ import UserTokensRepository from '@modules/users/infra/typeorm/repositories/User
 
 container.registerSingleton<IAppointmentsRepository>('AppointmentsRepository', AppointmentRepository);
 container.registerSingleton<IUsersRepository>('UsersRepository', UserRepository);
-container.registerSingleton<IUserTokensRepository>('UsersRepository', UserTokensRepository);
+container.registerSingleton<IUserTokensRepository>('UserTokensRepository', UserTokensRepository);

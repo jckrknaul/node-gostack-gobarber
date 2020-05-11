@@ -5,7 +5,7 @@ export default class CreateUserTokens1588968509543 implements MigrationInterface
     public async up(queryRunner: QueryRunner): Promise<void> {
       await queryRunner.createTable(
         new Table({
-          name: 'user_Tokens',
+          name: 'user_tokens',
           columns: [
             {
               name: 'id',

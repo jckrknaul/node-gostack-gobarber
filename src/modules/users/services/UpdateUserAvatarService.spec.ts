@@ -4,21 +4,28 @@ import UpdateUserAvatarService from './UpdateUserAvatarService';
 
 import AppError from '@shared/errors/AppError';
 
-describe('UpdateUserAvatar', () => {
-  it('Should be able to update a avatar file', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUserRepository = new FakeUsersRepository();
+let fakeStorageProvider: FakeStorageProvider;
+let fakeUserRepository: FakeUsersRepository;
+let updateUserAvatar: UpdateUserAvatarService;
 
-    const updateUserAvatar = new UpdateUserAvatarService(
+describe('UpdateUserAvatar', () => {
+
+  beforeEach(() => {
+    fakeStorageProvider = new FakeStorageProvider();
+    fakeUserRepository = new FakeUsersRepository();
+
+    updateUserAvatar = new UpdateUserAvatarService(
       fakeUserRepository,
       fakeStorageProvider
     );
+  });
 
-      const user = await fakeUserRepository.create({
-        name: 'Joao Teste',
-        email: 'joao@tet.com',
-        password: '123456'
-      });
+  it('Should be able to update a avatar file', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'Joao Teste',
+      email: 'joao@tet.com',
+      password: '123456'
+    });
 
     await updateUserAvatar.execute({
       user_id: user.id,
@@ -29,14 +36,6 @@ describe('UpdateUserAvatar', () => {
   });
 
   it('Should not be able to update when non exist user', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUserRepository = new FakeUsersRepository();
-
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUserRepository,
-      fakeStorageProvider
-    );
-
     await expect(updateUserAvatar.execute({
       user_id: 'usuario-inesistente',
       avatarFilename: 'AvatarFake.jpg'

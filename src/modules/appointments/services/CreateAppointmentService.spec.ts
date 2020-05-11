@@ -3,10 +3,19 @@ import CreateAppointmentService from './CreateAppointmentService';
 
 import AppError from '@shared/errors/AppError';
 
+let fakeAppointmentRepository: FakeAppointmentRepository;
+let createAppointmentService: CreateAppointmentService;
+
+
 describe('CreateAppointment', () => {
+
+  beforeEach(() => {
+    fakeAppointmentRepository = new FakeAppointmentRepository();
+    createAppointmentService = new CreateAppointmentService(fakeAppointmentRepository);
+  });
+
+
   it('Should be able to create a new appointment', async () => {
-    const fakeAppointmentRepository = new FakeAppointmentRepository();
-    const createAppointmentService = new CreateAppointmentService(fakeAppointmentRepository);
 
     const appointment = await createAppointmentService.execute({
       date: new Date(),
@@ -19,9 +28,6 @@ describe('CreateAppointment', () => {
   });
 
   it('Should be able throw exception with duplicate dates', async () => {
-    const fakeAppointmentRepository = new FakeAppointmentRepository();
-    const createAppointmentService = new CreateAppointmentService(fakeAppointmentRepository);
-
     const appointmentDate = new Date(2020, 4, 10, 11);
 
     const appointment = await createAppointmentService.execute({
