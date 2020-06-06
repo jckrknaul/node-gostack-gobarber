@@ -3,6 +3,7 @@ import Appointment from '../infra/typeorm/entities/Appointments';
 
 import IAppointmentRepository from '../repositories/IAppointmentsRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { classToClass } from 'class-transformer';
 
 interface RequestDTO {
   provider_id: string;
@@ -27,7 +28,6 @@ class ListProviderAppointmentsService {
     const cacheKey = `provider-appointment:${provider_id}:${year}-${month}-${day}`;
 
     let appointments = await this.cacheProvider.recover<Appointment[]>(cacheKey);
-
     if (!appointments) {
       appointments = await this.appointmentsRepository.findAllInDayFromProvider({
         provider_id,
@@ -36,9 +36,7 @@ class ListProviderAppointmentsService {
         day
       });
 
-      console.log('FOI PRO BANCOd');
-
-      await this.cacheProvider.save(cacheKey, appointments);
+      await this.cacheProvider.save(cacheKey, classToClass(appointments));
     }
 
     return appointments;
