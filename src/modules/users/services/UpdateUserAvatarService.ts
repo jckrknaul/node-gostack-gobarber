@@ -23,6 +23,8 @@ class UpdateUserAvatarService {
 
   public async execute({ user_id, avatarFilename }: RequestDTO): Promise<User> {
 
+    console.log('CaiuFOTO');
+
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
